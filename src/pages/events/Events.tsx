@@ -1,30 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtom } from "jotai";
 
-import {
-  getEvents,
-  addEvent,
-  removeEvent,
-  editEvent,
-} from "../../api/eventsApi";
+import { getEvents, addEvent } from "../../api/eventsApi";
 import AddEventComponent from "./AddEventComponent";
-import EditEventComponent from "./EditEventComponent";
-import { CreateEventInput, Event, UpdateEventInput } from "../../API";
-import EventComponent from "./EventComponent";
+import { CreateEventInput } from "../../API";
 import ModalContainer from "../modal/ModalContainer";
 import { notificationAtom } from "../../atoms/notificationAtom";
-
-const modalInitialState = { isOpen: false, mode: null };
+import { modalAtom, modalInitialState } from "../../atoms/modalAtom";
+import EventsList from "./EventsList";
+import { eventsAtom } from "../../atoms/eventsAtom";
 
 const Events = () => {
   const { user } = useAuthenticator((context) => [context.user]);
   const setNotification = useSetAtom(notificationAtom);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [modal, setModal] = useState<{
-    isOpen: boolean;
-    mode: "create" | "edit" | null;
-  }>(modalInitialState);
+  const setEvents = useSetAtom(eventsAtom);
+  const [modal, setModal] = useAtom(modalAtom);
+
   useEffect(() => {
     (async () => {
       await retrieveEvents();
@@ -33,10 +25,6 @@ const Events = () => {
 
   function onAddEventClick() {
     setModal({ isOpen: true, mode: "create" });
-  }
-
-  function onEditEventClick() {
-    setModal({ isOpen: true, mode: "edit" });
   }
 
   function handleCloseModal() {
@@ -82,44 +70,6 @@ const Events = () => {
     }
   }
 
-  async function handleDelete(id: string) {
-    try {
-      await removeEvent({ id });
-      await retrieveEvents();
-      setNotification({
-        isOpen: true,
-        message: "Successfully Created",
-        status: "success",
-      });
-    } catch (error) {
-      setNotification({
-        isOpen: true,
-        message: "Failed to Created",
-        status: "error",
-      });
-    }
-  }
-
-  async function handleEdit(data: UpdateEventInput) {
-    try {
-      await editEvent({ ...data, userId: user.userId });
-      await retrieveEvents();
-      setNotification({
-        isOpen: true,
-        message: "Successfully Edited",
-        status: "success",
-      });
-    } catch (error) {
-      setNotification({
-        isOpen: true,
-        message: "Failed to Update",
-        status: "error",
-      });
-    } finally {
-      handleCloseModal();
-    }
-  }
-
   return (
     <div>
       <div className="flex justify-center mt-8">
@@ -131,36 +81,11 @@ const Events = () => {
         </button>
       </div>
       {modal.isOpen && modal.mode === "create" && (
-        <ModalContainer handleCloseModal={handleCloseModal}>
+        <ModalContainer>
           {<AddEventComponent handleEventCreation={handleEventCreation} />}
         </ModalContainer>
       )}
-      {events.map(
-        (event) =>
-          event && (
-            <>
-              <EventComponent
-                event={event}
-                key={event.id}
-                handleDelete={() => handleDelete(event.id)}
-                handleEdit={() => onEditEventClick()}
-                isMine={event.userId === user.userId}
-              />
-              {modal.isOpen && modal.mode === "edit" && (
-                <ModalContainer handleCloseModal={handleCloseModal}>
-                  {
-                    <EditEventComponent
-                      handleEdit={handleEdit}
-                      iName={event.name}
-                      iDescription={event.description}
-                      iDate={event.date}
-                    />
-                  }
-                </ModalContainer>
-              )}
-            </>
-          )
-      )}
+      <EventsList retrieveEvents={retrieveEvents} />
     </div>
   );
 };

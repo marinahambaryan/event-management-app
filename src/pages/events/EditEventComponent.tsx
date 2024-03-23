@@ -4,18 +4,18 @@ import { useAuthenticator } from "@aws-amplify/ui-react";
 import Input from "../../components/Input";
 import { UpdateEventInput } from "../../API";
 
-type AddEventComponentProps = {
+type EditEventComponentProps = {
   handleEdit: (data: UpdateEventInput) => void;
   iName: string;
   iDescription: string;
   iDate: string;
 };
-const AddEventComponent = ({
+const EditEventComponent = ({
   handleEdit,
   iName,
   iDescription,
   iDate,
-}: AddEventComponentProps) => {
+}: EditEventComponentProps) => {
   const [name, setName] = useState(iName);
   const [description, setDescription] = useState(iDescription);
   const [date, setDate] = useState(iDate);
@@ -65,4 +65,4 @@ const AddEventComponent = ({
   );
 };
 
-export default AddEventComponent;
+export default EditEventComponent;

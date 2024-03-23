@@ -1,18 +1,18 @@
-import { Event } from "../../API";
+import { Event as EventType } from "../../../API";
 
-type EventComponentProps = {
-  event: Event;
+type EventProps = {
+  event: EventType;
   handleDelete: () => void;
-  handleEdit: () => void;
+  onEditEventClick: () => void;
   isMine: boolean;
 };
 
-const EventComponent = ({
-  event,
-  handleDelete,
-  handleEdit,
+const Event = ({
   isMine,
-}: EventComponentProps) => {
+  handleDelete,
+  onEditEventClick,
+  event,
+}: EventProps) => {
   const { name, description, date } = event;
 
   return (
@@ -33,7 +33,7 @@ const EventComponent = ({
             </button>
             <button
               disabled
-              onClick={handleEdit}
+              onClick={onEditEventClick}
               className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50 disabled:bg-green-500 disabled:hover:bg-green-500 cursor-not-allowed"
             >
               Edit
@@ -45,4 +45,4 @@ const EventComponent = ({
   );
 };
 
-export default EventComponent;
+export default Event;

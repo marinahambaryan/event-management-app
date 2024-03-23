@@ -1,5 +1,6 @@
 import { useAtomValue } from "jotai";
 import { Outlet } from "react-router-dom";
+
 import NavBar from "./NavBar";
 import PageLoader from "./PageLoader";
 import AlertNotification from "./AlertNotification";

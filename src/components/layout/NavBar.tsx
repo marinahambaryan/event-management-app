@@ -10,7 +10,6 @@ const NavBar = () => {
     await signOut();
     navigate("/");
   }
-  console.log({ user });
 
   return (
     <nav className="bg-gray-800 p-4">

@@ -1,12 +1,17 @@
+import { useSetAtom } from "jotai";
+import { modalAtom, modalInitialState } from "../../atoms/modalAtom";
+
 type ModalContainerProps = {
-  handleCloseModal: () => void;
   children: React.ReactNode;
 };
 
-const ModalContainer = ({
-  handleCloseModal,
-  children,
-}: ModalContainerProps) => {
+const ModalContainer = ({ children }: ModalContainerProps) => {
+  const setModal = useSetAtom(modalAtom);
+
+  function handleCloseModal() {
+    setModal(modalInitialState);
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div
