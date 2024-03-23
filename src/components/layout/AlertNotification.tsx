@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useAtom } from "jotai";
 
 import { notificationAtom } from "../../atoms/notificationAtom";
@@ -8,6 +8,12 @@ const AlertNotification = () => {
   const closeAlert = () => {
     setNotification({ message: "", status: null, isOpen: false });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setNotification({ message: "", status: null, isOpen: false });
+    }, 2000);
+  }, []);
 
   const { bgColor, textColor, iconColor } = useMemo(() => {
     switch (notification.status) {
@@ -43,23 +49,10 @@ const AlertNotification = () => {
 
   return (
     <div
-      className={`border ${bgColor} border-t-4 border-solid rounded px-4 py-3 shadow-md`}
+      className={`bg-opacity-75 fixed top-0 left-0 right-0 z-50 border ${bgColor} border-t-4 border-solid rounded px-4 py-3 shadow-md`}
       role="alert"
     >
       <div className="flex items-center">
-        <div className="py-1">
-          <svg
-            className={`fill-current h-6 w-6 ${iconColor}`}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.358 5.65a.5.5 0 00-.708.708L9.293 10l-3.64 3.642a.5.5 0 00.707.708L10 10.707l3.642 3.64a.5.5 0 00.708-.707L10.707 10l3.64-3.642a.5.5 0 000-.707z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
         <div className="ml-2">
           <p className={`font-bold ${textColor}`}>{notification.message}</p>
         </div>

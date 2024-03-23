@@ -14,9 +14,7 @@ https://docs.amplify.aws/react/start/getting-started/installation/
 
 https://docs.amplify.aws/javascript/tools/cli/start/key-workflows/
 
-4. Open Amazon developer console Cognito service and Create a User Pool
-
-5. `amplify push`
+4. `amplify push`
 
 Run project Locally
 

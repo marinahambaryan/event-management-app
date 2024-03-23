@@ -14,7 +14,7 @@ const EventComponent = ({
   isMine,
 }: EventComponentProps) => {
   const { name, description, date } = event;
-  console.log({ event });
+
   return (
     <div className="max-w-md w-full mx-auto bg-white rounded-md shadow-md p-4 mb-4">
       <div className="flex justify-between items-center">
@@ -32,8 +32,9 @@ const EventComponent = ({
               Delete
             </button>
             <button
+              disabled
               onClick={handleEdit}
-              className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50 disabled:bg-green-500 disabled:hover:bg-green-500 cursor-not-allowed"
             >
               Edit
             </button>

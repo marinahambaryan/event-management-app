@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
+import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useSetAtom } from "jotai";
+
 import {
   getEvents,
   addEvent,
   removeEvent,
   editEvent,
 } from "../../api/eventsApi";
-import { useAuthenticator } from "@aws-amplify/ui-react";
-
 import AddEventComponent from "./AddEventComponent";
 import EditEventComponent from "./EditEventComponent";
 import { CreateEventInput, Event, UpdateEventInput } from "../../API";
 import EventComponent from "./EventComponent";
 import ModalContainer from "../modal/ModalContainer";
+import { notificationAtom } from "../../atoms/notificationAtom";
 
 const modalInitialState = { isOpen: false, mode: null };
 
 const Events = () => {
   const { user } = useAuthenticator((context) => [context.user]);
+  const setNotification = useSetAtom(notificationAtom);
   const [events, setEvents] = useState<Event[]>([]);
   const [modal, setModal] = useState<{
     isOpen: boolean;
@@ -43,10 +46,13 @@ const Events = () => {
   async function retrieveEvents() {
     try {
       const events = await getEvents();
-      console.log({ events });
       setEvents(events);
     } catch (error) {
-      console.log({ error });
+      setNotification({
+        isOpen: true,
+        message: "Failed to Retrieve Data",
+        status: "error",
+      });
     }
   }
 
@@ -56,12 +62,23 @@ const Events = () => {
     date,
   }: CreateEventInput) {
     try {
-      if (user)
+      if (user) {
         await addEvent({ name, description, date, userId: user.userId });
-      handleCloseModal();
-      await retrieveEvents();
+        await retrieveEvents();
+        setNotification({
+          isOpen: true,
+          message: "Successfully Created",
+          status: "success",
+        });
+      }
     } catch (error) {
-      console.log({ error });
+      setNotification({
+        isOpen: true,
+        message: "Failed to Create",
+        status: "error",
+      });
+    } finally {
+      handleCloseModal();
     }
   }
 
@@ -69,17 +86,35 @@ const Events = () => {
     try {
       await removeEvent({ id });
       await retrieveEvents();
+      setNotification({
+        isOpen: true,
+        message: "Successfully Created",
+        status: "success",
+      });
     } catch (error) {
-      console.log({ error });
+      setNotification({
+        isOpen: true,
+        message: "Failed to Created",
+        status: "error",
+      });
     }
   }
 
   async function handleEdit(data: UpdateEventInput) {
     try {
-      await editEvent(data);
+      await editEvent({ ...data, userId: user.userId });
       await retrieveEvents();
+      setNotification({
+        isOpen: true,
+        message: "Successfully Edited",
+        status: "success",
+      });
     } catch (error) {
-      console.log({ error });
+      setNotification({
+        isOpen: true,
+        message: "Failed to Update",
+        status: "error",
+      });
     } finally {
       handleCloseModal();
     }
@@ -95,11 +130,9 @@ const Events = () => {
           Add Event
         </button>
       </div>
-      {modal.isOpen && (
+      {modal.isOpen && modal.mode === "create" && (
         <ModalContainer handleCloseModal={handleCloseModal}>
-          {modal.mode === "create" && (
-            <AddEventComponent handleEventCreation={handleEventCreation} />
-          )}
+          {<AddEventComponent handleEventCreation={handleEventCreation} />}
         </ModalContainer>
       )}
       {events.map(
@@ -113,16 +146,16 @@ const Events = () => {
                 handleEdit={() => onEditEventClick()}
                 isMine={event.userId === user.userId}
               />
-              {modal.isOpen && (
+              {modal.isOpen && modal.mode === "edit" && (
                 <ModalContainer handleCloseModal={handleCloseModal}>
-                  {modal.mode === "edit" && (
+                  {
                     <EditEventComponent
                       handleEdit={handleEdit}
                       iName={event.name}
                       iDescription={event.description}
                       iDate={event.date}
                     />
-                  )}
+                  }
                 </ModalContainer>
               )}
             </>
