@@ -2,24 +2,34 @@ import { useState } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 
 import Input from "../../components/Input";
-import { CreateEventInput } from "../../API";
+import { UpdateEventInput } from "../../API";
 
 type AddEventComponentProps = {
-  handleEventCreation: ({ name, description, date }: CreateEventInput) => void;
+  handleEdit: (data: UpdateEventInput) => void;
+  iName: string;
+  iDescription: string;
+  iDate: string;
 };
-const AddEventComponent = ({ handleEventCreation }: AddEventComponentProps) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+const AddEventComponent = ({
+  handleEdit,
+  iName,
+  iDescription,
+  iDate,
+}: AddEventComponentProps) => {
+  const [name, setName] = useState(iName);
+  const [description, setDescription] = useState(iDescription);
+  const [date, setDate] = useState(iDate);
 
   const { user } = useAuthenticator((context) => [context.user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    handleEventCreation({ name, description, date, userId: user.userId });
-    setName("");
-    setDescription("");
-    setDate("");
+    handleEdit({
+      id: name,
+      description,
+      date,
+      userId: user.userId,
+    });
   };
 
   return (
@@ -49,7 +59,7 @@ const AddEventComponent = ({ handleEventCreation }: AddEventComponentProps) => {
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
-        Create Event
+        Edit Event
       </button>
     </form>
   );

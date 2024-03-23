@@ -14,6 +14,7 @@ export const getEvent = /* GraphQL */ `query GetEvent($id: ID!) {
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename
@@ -31,6 +32,7 @@ export const listEvents = /* GraphQL */ `query ListEvents(
       name
       description
       date
+      userId
       createdAt
       updatedAt
       __typename

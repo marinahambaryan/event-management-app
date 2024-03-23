@@ -1,10 +1,8 @@
-import { useAtomValue } from "jotai";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Outlet, Navigate } from "react-router-dom";
 
-import { userAtom } from "../../atoms/userAtom";
-
 const AuthLayout = () => {
-  const user = useAtomValue(userAtom);
+  const { user } = useAuthenticator((context) => [context.user]);
 
   if (user) {
     return <Navigate to="/events" />;

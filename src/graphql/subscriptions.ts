@@ -14,6 +14,7 @@ export const onCreateEvent = /* GraphQL */ `subscription OnCreateEvent($filter: 
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename
@@ -29,6 +30,7 @@ export const onUpdateEvent = /* GraphQL */ `subscription OnUpdateEvent($filter: 
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename
@@ -44,6 +46,7 @@ export const onDeleteEvent = /* GraphQL */ `subscription OnDeleteEvent($filter: 
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename

@@ -17,6 +17,7 @@ export const createEvent = /* GraphQL */ `mutation CreateEvent(
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename
@@ -35,6 +36,7 @@ export const updateEvent = /* GraphQL */ `mutation UpdateEvent(
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename
@@ -53,6 +55,7 @@ export const deleteEvent = /* GraphQL */ `mutation DeleteEvent(
     name
     description
     date
+    userId
     createdAt
     updatedAt
     __typename

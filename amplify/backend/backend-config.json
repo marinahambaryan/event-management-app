@@ -1,6 +1,6 @@
 {
   "api": {
-    "eventmanagementapp": {
+    "eventsapp": {
       "dependsOn": [],
       "output": {
         "authConfig": {
@@ -18,7 +18,7 @@
     }
   },
   "auth": {
-    "eventmanagementapp08cac388": {
+    "eventsapp5f539c45": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {

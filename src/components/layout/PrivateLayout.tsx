@@ -1,13 +1,12 @@
-import { useAtomValue } from "jotai";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import type { WithAuthenticatorProps } from "@aws-amplify/ui-react";
 
-import { userAtom } from "../../atoms/userAtom";
-
-const PrivateLayout = () => {
-  const user = useAtomValue(userAtom);
-
+const PrivateLayout = ({
+  signOut = () => {},
+  user,
+}: WithAuthenticatorProps) => {
   if (!user) {
-    return <Navigate to="/signIn" />;
+    signOut();
   }
 
   return (
