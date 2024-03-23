@@ -6,7 +6,7 @@ type InputProps = {
   name: string;
   value: string;
   error?: string;
-  handleChange: (e: ChangeEvent) => void;
+  handleChange: (e: ChangeEvent | any) => void;
 };
 const Input = ({
   type,

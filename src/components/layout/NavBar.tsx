@@ -1,15 +1,18 @@
+import { Link } from "react-router-dom";
+import { signOut } from "aws-amplify/auth";
+import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { Link, useNavigate } from "react-router-dom";
 import { userAtom } from "../../atoms/userAtom";
 
 const NavBar = () => {
   const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
 
-  const onLogoutClick = () => {
+  async function onLogoutClick() {
+    await signOut();
     setUser(null);
-    navigate("/", { replace: true });
-  };
+    navigate("/");
+  }
 
   return (
     <nav className="bg-gray-800 p-4">

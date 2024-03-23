@@ -3,11 +3,11 @@ import { Outlet, Navigate } from "react-router-dom";
 
 import { userAtom } from "../../atoms/userAtom";
 
-const AuthLayout = () => {
+const PrivateLayout = () => {
   const user = useAtomValue(userAtom);
 
-  if (user) {
-    return <Navigate to="/events" />;
+  if (!user) {
+    return <Navigate to="/signIn" />;
   }
 
   return (
@@ -17,4 +17,4 @@ const AuthLayout = () => {
   );
 };
 
-export default AuthLayout;
+export default PrivateLayout;

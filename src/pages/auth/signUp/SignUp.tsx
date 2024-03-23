@@ -1,18 +1,54 @@
+import { useState } from "react";
 import { Formik } from "formik";
-import { useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { userAtom } from "../../atoms/userAtom";
-import { validateSignOutForm } from "../../utils/validation";
-import Input from "../../components/Input";
+import { signUp } from "aws-amplify/auth";
+
+import { validateSignUpForm } from "../../../utils/validation";
+import Input from "../../../components/Input";
+
+type SignUpParameters = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
 
 const SignUp = () => {
-  const setUser = useSetAtom(userAtom);
+  const [globalError, setGlobalError] = useState("");
   const navigate = useNavigate();
+
+  async function handleSignUp({
+    email,
+    password,
+    firstName,
+    lastName,
+  }: SignUpParameters) {
+    try {
+      await signUp({
+        username: email,
+        password,
+        options: {
+          userAttributes: {
+            email,
+            given_name: firstName,
+            family_name: lastName,
+          },
+          autoSignIn: true,
+        },
+      });
+      navigate("/validate");
+    } catch (error: any) {
+      setGlobalError((error && error?.message) || "Something went wrong");
+    }
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+        {globalError && (
+          <p className="text-red-500 text-sm mt-1">{globalError}</p>
+        )}
         <Formik
           initialValues={{
             email: "",
@@ -21,24 +57,16 @@ const SignUp = () => {
             lastName: "",
           }}
           validate={(values) => {
-            const errors = validateSignOutForm(values);
+            const errors = validateSignUpForm(values);
             return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-              setUser((prevState) => ({ ...prevState, email: values.email }));
-            }, 400);
+            setSubmitting(false);
+            handleSignUp(values);
           }}
         >
           {({ values, errors, handleChange, handleSubmit }) => (
-            <form
-              onSubmit={() => {
-                handleSubmit();
-                navigate("/events");
-              }}
-            >
+            <form onSubmit={handleSubmit}>
               <Input
                 type="text"
                 label={"First Name"}

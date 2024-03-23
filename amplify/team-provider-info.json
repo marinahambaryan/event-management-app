@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-eventmanagementapp-dev-30521-authRole",
+      "UnauthRoleArn": "arn:aws:iam::273078319271:role/amplify-eventmanagementapp-dev-30521-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::273078319271:role/amplify-eventmanagementapp-dev-30521-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-eventmanagementapp-dev-30521-deployment",
+      "UnauthRoleName": "amplify-eventmanagementapp-dev-30521-unauthRole",
+      "StackName": "amplify-eventmanagementapp-dev-30521",
+      "StackId": "arn:aws:cloudformation:us-east-1:273078319271:stack/amplify-eventmanagementapp-dev-30521/80b49fd0-e7d7-11ee-9b0e-12be16a3ab8f",
+      "AmplifyAppId": "d3tfh7k79go1nt"
+    },
+    "categories": {
+      "api": {
+        "eventmanagementapp": {}
+      },
+      "auth": {
+        "eventmanagementapp08cac388": {}
+      }
+    }
+  }
+}
